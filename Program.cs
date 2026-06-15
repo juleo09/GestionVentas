@@ -1,4 +1,4 @@
-﻿/* V16: Agregar función MostrarRegistro() para que el administrador pueda ver un historial de ventas con detalles de cada compra, incluyendo el cálculo de ganancias totales.
+﻿/* V17: Agregar función Contar() para mostrar la cantidad total de productos registrados en el inventario.
 */
 using System;
 using System.Collections.Generic;
@@ -526,6 +526,13 @@ namespace CodigoBase
             Console.WriteLine(new string('-', 68));
             Console.WriteLine($"Total Histórico de Ventas: ${acumuladorVentas}");
             Console.WriteLine($"Ganancias Totales:          ${gananciasTotales}");
+        }
+
+        // CONTAR(cantidad de productos en el inventario)
+        static void Contar()
+        {
+            var lista = LeerInventario();
+            Console.WriteLine("Cantidad total de productos registrados en inventario: " + lista.Count);
         }
 
     }
