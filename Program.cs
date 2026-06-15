@@ -1,4 +1,4 @@
-﻿/* V5: Agregar función MostrarCatalogo para mostrar solo el nombre y precio de venta al cliente
+﻿/* V6: Agregar función AgregarInventario() para que el administrador pueda agregar productos al inventario, con validación de entrada y actualización del archivo CSV.
 */
 using System;
 using System.Collections.Generic;
@@ -222,6 +222,27 @@ namespace CodigoBase
             {
                 Console.WriteLine($"{i[0],-20}{i[2],-15}");
             }
+        }
+
+        // AGREGAR PRODUCTO(Agregar producto al Inventario)
+        static void AgregarInventario()
+        {
+            var lista = LeerInventario();
+
+            Console.Write("Nombre: ");
+            string nombre = Console.ReadLine();
+
+            Console.Write("Precio Costo: ");
+            string costo = Console.ReadLine();
+
+            Console.Write("Precio Venta: ");
+            string venta = Console.ReadLine();
+
+            lista.Add(new string[] { nombre, costo, venta });
+
+            GuardarInventario(lista);
+
+            Console.WriteLine("Producto Agregado exitosamente.");
         }
 
     }
