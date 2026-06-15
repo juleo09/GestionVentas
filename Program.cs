@@ -1,5 +1,4 @@
-﻿/* V15: Agregar función GuardarRegistro() para guardar el registro histórico de ventas en un archivo CSV, y modificar la función FinalizarCompra() para trasladar los elementos del carrito al registro antes de vaciarlo.
-Además, agregar una opción en el panel de administrador para visualizar el registro histórico de ventas.
+﻿/* V16: Agregar función MostrarRegistro() para que el administrador pueda ver un historial de ventas con detalles de cada compra, incluyendo el cálculo de ganancias totales.
 */
 using System;
 using System.Collections.Generic;
@@ -479,6 +478,54 @@ namespace CodigoBase
             }
 
             File.WriteAllLines(archivoCsv3, lineas);
+        }
+
+        // MOSTRAR CSV Registro
+        static void MostrarRegistro()
+        {
+            var listaRegistro = LeerRegistro();
+            var listaInventario = LeerInventario(); // Cargamos el inventario para cruzar los costos
+
+            double acumuladorVentas = 0;
+            double acumuladorCostos = 0;
+
+            Console.WriteLine("\n--- REGISTRO HISTÓRICO DE VENTAS (ADMIN) ---");
+            Console.WriteLine($"{"ID Compra",-18}{"Cant.",-8}{"Nombre",-18}{"Precio V.",-12}{"Total V.",-12}");
+            Console.WriteLine(new string('-', 68));
+
+            foreach (var i in listaRegistro)
+            {
+                // Extraer datos del registro de ventas
+                string nombreProducto = i[2];
+                int cantidad = Convert.ToInt32(i[1]);
+                double precioVentaUnitario = Convert.ToDouble(i[3]);
+                double totalProductoVenta = Convert.ToDouble(i[4]);
+
+                Console.WriteLine($"{i[0],-18}{cantidad,-8}{nombreProducto,-18}${precioVentaUnitario,-12}${totalProductoVenta,-12}");
+
+                acumuladorVentas += totalProductoVenta;
+
+                // Buscar el precio de costo unitario correspondiente en el inventario
+                double precioCostoUnitario = 0;
+                foreach (var inv in listaInventario)
+                {
+                    if (inv[0].Equals(nombreProducto, StringComparison.OrdinalIgnoreCase))
+                    {
+                        precioCostoUnitario = Convert.ToDouble(inv[1]);
+                        break;
+                    }
+                }
+
+                // Calcular el costo total de esta venta específica (Costo Unitario * Cantidad)
+                acumuladorCostos += (precioCostoUnitario * cantidad);
+            }
+
+            // Ganancia Neta = Ingresos Totales - Costos Totales
+            double gananciasTotales = acumuladorVentas - acumuladorCostos;
+
+            Console.WriteLine(new string('-', 68));
+            Console.WriteLine($"Total Histórico de Ventas: ${acumuladorVentas}");
+            Console.WriteLine($"Ganancias Totales:          ${gananciasTotales}");
         }
 
     }
