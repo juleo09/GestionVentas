@@ -1,0 +1,14 @@
+D:\VSC\CSHARP\GestionVentas\bin\Debug\net10.0\GestionVentas.exe
+D:\VSC\CSHARP\GestionVentas\bin\Debug\net10.0\GestionVentas.deps.json
+D:\VSC\CSHARP\GestionVentas\bin\Debug\net10.0\GestionVentas.runtimeconfig.json
+D:\VSC\CSHARP\GestionVentas\bin\Debug\net10.0\GestionVentas.dll
+D:\VSC\CSHARP\GestionVentas\bin\Debug\net10.0\GestionVentas.pdb
+D:\VSC\CSHARP\GestionVentas\obj\Debug\net10.0\GestionVentas.GeneratedMSBuildEditorConfig.editorconfig
+D:\VSC\CSHARP\GestionVentas\obj\Debug\net10.0\GestionVentas.AssemblyInfoInputs.cache
+D:\VSC\CSHARP\GestionVentas\obj\Debug\net10.0\GestionVentas.AssemblyInfo.cs
+D:\VSC\CSHARP\GestionVentas\obj\Debug\net10.0\GestionVentas.csproj.CoreCompileInputs.cache
+D:\VSC\CSHARP\GestionVentas\obj\Debug\net10.0\GestionVentas.dll
+D:\VSC\CSHARP\GestionVentas\obj\Debug\net10.0\refint\GestionVentas.dll
+D:\VSC\CSHARP\GestionVentas\obj\Debug\net10.0\GestionVentas.pdb
+D:\VSC\CSHARP\GestionVentas\obj\Debug\net10.0\GestionVentas.genruntimeconfig.cache
+D:\VSC\CSHARP\GestionVentas\obj\Debug\net10.0\ref\GestionVentas.dll
