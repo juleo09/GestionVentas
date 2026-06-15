@@ -1,4 +1,4 @@
-﻿/* V6: Agregar función AgregarInventario() para que el administrador pueda agregar productos al inventario, con validación de entrada y actualización del archivo CSV.
+﻿/* V7: Agregar función ModificarInventario()ducto a modificar, verificar si existe en el inventario y permitir al administrador ingresar los nuevos precios
 */
 using System;
 using System.Collections.Generic;
@@ -244,6 +244,43 @@ namespace CodigoBase
 
             Console.WriteLine("Producto Agregado exitosamente.");
         }
+
+        // MODIFICAR PRODUCTO(modificar algún producto en el inventario)
+        static void ModificarInventario()
+        {
+            var lista = LeerInventario();
+
+            Console.Write("Ingrese nombre del producto a modificar: ");
+            string nombre = Console.ReadLine();
+
+            bool encontrado = false;
+
+            foreach (var i in lista)
+            {
+                if (i[0].Equals(nombre, StringComparison.OrdinalIgnoreCase))
+                {
+                    Console.Write($"Nuevo precio de costo (Actual: {i[1]}):");
+                    i[1] = Console.ReadLine();
+
+                    Console.Write($"Nuevo precio de venta (Actual: {i[2]}): ");
+                    i[2] = Console.ReadLine();
+
+                    encontrado = true;
+                    break;
+                }
+            }
+
+            if (encontrado)
+            {
+                GuardarInventario(lista);
+                Console.WriteLine("Producto modificado correctamente.");
+            }
+            else
+            {
+                Console.WriteLine("Producto no encontrado.");
+            }
+        }
+
 
     }
 }
