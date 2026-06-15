@@ -1,4 +1,5 @@
-﻿/* V17: Agregar función Contar() para mostrar la cantidad total de productos registrados en el inventario.
+﻿/* V18: Agregar función GuardarBinario() para respaldar el inventario en formato binario, utilizando BinaryWriter para escribir los datos de manera eficiente. 
+Esta función crea un archivo binario que contiene la cantidad de productos y sus detalles (nombre, costo y precio de venta)
 */
 using System;
 using System.Collections.Generic;
@@ -533,6 +534,26 @@ namespace CodigoBase
         {
             var lista = LeerInventario();
             Console.WriteLine("Cantidad total de productos registrados en inventario: " + lista.Count);
+        }
+
+        // BINARIO
+        static void GuardarBinario()
+        {
+            var lista = LeerInventario();
+
+            using (BinaryWriter bw = new BinaryWriter(File.Open(archivoBin, FileMode.Create)))
+            {
+                bw.Write(lista.Count);
+
+                foreach (var i in lista)
+                {
+                    bw.Write(i[0]);
+                    bw.Write(i[1]);
+                    bw.Write(i[2]);
+                }
+            }
+
+            Console.WriteLine("El inventario se ha respaldado correctamente en formato binario.");
         }
 
     }
