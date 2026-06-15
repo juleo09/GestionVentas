@@ -1,5 +1,4 @@
-﻿/* V1: Código base para una gentión de ventas con interfaz de administrador y usuario, utilizando archivos CSV para el inventario y el carrito, y un archivo binario para respaldos. 
-El programa permite al administrador gestionar el inventario y al usuario realizar compras, con un registro histórico de ventas.
+﻿/* V2: Agregar función LeerInventario() para manejar la lectura del archivo CSV de inventario, con validación de existencia y formato.
 */
 using System;
 using System.Collections.Generic;
@@ -155,3 +154,31 @@ namespace CodigoBase
             } while (o != 0);
 
         }
+        //-----------------------------------------------------------------------------------CSV inventario
+        // LEER CSV inventario
+        static List<string[]> LeerInventario()
+        {
+            List<string[]> lista = new List<string[]>();
+
+            if (!File.Exists(archivoCsv))
+            {
+                // Crear archivo con cabecera si no existe para evitar caídas
+                File.WriteAllLines(archivoCsv, new string[] { "Nombre,Costo,Venta" });
+                return lista;
+            }
+
+            string[] lineas = File.ReadAllLines(archivoCsv);
+
+            for (int i = 1; i < lineas.Length; i++)
+            {
+                if (string.IsNullOrWhiteSpace(lineas[i])) continue;
+                string[] datos = lineas[i].Split(',');
+
+                if (datos.Length == 3)
+                    lista.Add(datos);
+            }
+
+            return lista;
+        }
+    }
+}

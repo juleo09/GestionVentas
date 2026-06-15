@@ -12,3 +12,4 @@ D:\VSC\CSHARP\GestionVentas\obj\Debug\net10.0\refint\GestionVentas.dll
 D:\VSC\CSHARP\GestionVentas\obj\Debug\net10.0\GestionVentas.pdb
 D:\VSC\CSHARP\GestionVentas\obj\Debug\net10.0\GestionVentas.genruntimeconfig.cache
 D:\VSC\CSHARP\GestionVentas\obj\Debug\net10.0\ref\GestionVentas.dll
+D:\VSC\CSHARP\GestionVentas\obj\Debug\net10.0\GestionVentas.sourcelink.json
