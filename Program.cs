@@ -1,4 +1,4 @@
-﻿/* V4: Agregar función MostrarInventario() para mostrar el inventario completo al administrador
+﻿/* V5: Agregar función MostrarCatalogo para mostrar solo el nombre y precio de venta al cliente
 */
 using System;
 using System.Collections.Generic;
@@ -209,6 +209,20 @@ namespace CodigoBase
             }
         }
 
+        // MOSTRAR CATÁLOGO(Para mostrar el catálogo al cliente)
+        static void MostrarCatalogo()
+        {
+            var lista = LeerInventario();
+
+            Console.WriteLine("\n--- CATÁLOGO ---");
+            string[] columnas = {"Nombre", "Precio"};
+            Console.WriteLine($"{columnas[0],-20}{columnas[1],-15}");
+            Console.WriteLine(new string('-', 35));
+            foreach (var i in lista)
+            {
+                Console.WriteLine($"{i[0],-20}{i[2],-15}");
+            }
+        }
 
     }
 }
