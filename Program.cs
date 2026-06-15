@@ -1,4 +1,4 @@
-﻿/* V13: Agregar función FinalizarCompra() para trasladar elementos del carrito al registro histórico de ventas y vaciar el carrito después de finalizar la compra.
+﻿/* V14: Agregar función LeerRegistro() para mostrar el historial de ventas al administrador.
 */
 using System;
 using System.Collections.Generic;
@@ -438,6 +438,32 @@ namespace CodigoBase
 
                 Console.WriteLine("¡Gracias por su compra! ;) Su orden ha sido registrada.");
             }
+        }
+
+        //-----------------------------------------------------------------------------------CSV registro
+        // LEER CSV Registro
+        static List<string[]> LeerRegistro()
+        {
+            List<string[]> lista = new List<string[]>();
+
+            if (!File.Exists(archivoCsv3))
+            {
+                File.WriteAllLines(archivoCsv3, new string[] { "NumeroCompra,Cantidad,Nombre,Precio,TotalProducto" });
+                return lista;
+            }
+
+            string[] lineas = File.ReadAllLines(archivoCsv3);
+
+            for (int i = 1; i < lineas.Length; i++)
+            {
+                if (string.IsNullOrWhiteSpace(lineas[i])) continue;
+                string[] datos = lineas[i].Split(',');
+
+                if (datos.Length == 5)
+                    lista.Add(datos);
+            }
+
+            return lista;
         }
 
     }
