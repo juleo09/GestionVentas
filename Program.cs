@@ -1,4 +1,4 @@
-﻿/* V2: Agregar función LeerInventario() para manejar la lectura del archivo CSV de inventario, con validación de existencia y formato.
+﻿/* V3: Agregar función GuardarInventario() para guardar cambios en el inventario al archivo CSV
 */
 using System;
 using System.Collections.Generic;
@@ -180,5 +180,20 @@ namespace CodigoBase
 
             return lista;
         }
+
+        // GUARDAR CSV inventario
+        static void GuardarInventario(List<string[]> lista)
+        {
+            List<string> lineas = new List<string>();
+            lineas.Add("Nombre,Costo,Venta");
+
+            foreach (var i in lista)
+            {
+                lineas.Add($"{i[0]},{i[1]},{i[2]}");
+            }
+
+            File.WriteAllLines(archivoCsv, lineas);
+        }
+        
     }
 }
