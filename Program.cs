@@ -1,4 +1,4 @@
-﻿/* V3: Agregar función GuardarInventario() para guardar cambios en el inventario al archivo CSV
+﻿/* V4: Agregar función MostrarInventario() para mostrar el inventario completo al administrador
 */
 using System;
 using System.Collections.Generic;
@@ -195,5 +195,20 @@ namespace CodigoBase
             File.WriteAllLines(archivoCsv, lineas);
         }
         
+        // MOSTRAR INVENTARIO(mostrar inventario al Administrador)
+        static void MostrarInventario()
+        {
+            var lista = LeerInventario();
+
+            Console.WriteLine("\n--- INVENTARIO COMPLETO (ADMIN) ---");
+            Console.WriteLine($"{"Nombre",-20}{"Costo",-15}{"Venta",-15}");
+            Console.WriteLine(new string('-', 50));
+            foreach (var i in lista)
+            {
+                Console.WriteLine($"{i[0],-20} {i[1],-15} {i[2],-15}");
+            }
+        }
+
+
     }
 }
