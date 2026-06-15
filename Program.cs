@@ -1,4 +1,4 @@
-﻿/* V10: Agregar función LeerCarrito() para leer el contenido del carrito desde un archivo CSV
+﻿/* V11: Agregar función GuardarCarrito() para guardar el carrito en un archivo CSV 
 */
 using System;
 using System.Collections.Generic;
@@ -372,6 +372,20 @@ namespace CodigoBase
             }
 
             return lista;
+        }
+
+        // GUARDAR CSV Carrito
+        static void GuardarCarrito(List<string[]> lista)
+        {
+            List<string> lineas = new List<string>();
+            lineas.Add("Cantidad,Nombre,Precio,TotalProducto");
+
+            foreach (var i in lista)
+            {
+                lineas.Add($"{i[0]},{i[1]},{i[2]},{i[3]}");
+            }
+
+            File.WriteAllLines(archivoCsv2, lineas);
         }
 
     }
