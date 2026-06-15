@@ -1,4 +1,4 @@
-﻿/* V12: Agregar función MostrarCarrito() para mostrar el contenido del carrito antes de finalizar la compra, con formato tabular y cálculo del total a pagar.
+﻿/* V13: Agregar función FinalizarCompra() para trasladar elementos del carrito al registro histórico de ventas y vaciar el carrito después de finalizar la compra.
 */
 using System;
 using System.Collections.Generic;
@@ -404,6 +404,40 @@ namespace CodigoBase
             }
             Console.WriteLine(new string('-', 62));
             Console.WriteLine($"\t\t\t\tTotal a pagar: ${acumulador}\n");
+        }
+
+        //FINALIZAR COMPRA
+        static void FinalizarCompra()
+        {
+            var carrito = LeerCarrito();
+            if (carrito.Count == 0)
+            {
+                Console.WriteLine("El carrito está vacío.");
+                return;
+            }
+
+            Console.Write("¿Desea finalizar la compra? (si/no): ");
+            string finalizar = Console.ReadLine().ToLower();
+
+            if (finalizar == "si" || finalizar == "s")
+            {
+                // Trasladar elementos del carrito al registro histórico de ventas
+                string numeroCompra = DateTime.Now.ToString("yyyyMMddHHmmss"); // Genera un ID único basado en tiempo
+                var registro = LeerRegistro();
+
+                foreach (var item in carrito)
+                {
+                    // Formato Registro: NumeroCompra, Cantidad, Nombre, Precio, TotalProducto
+                    registro.Add(new string[] { numeroCompra, item[0], item[1], item[2], item[3] });
+                }
+
+                GuardarRegistro(registro);
+
+                // Vaciar Carrito de compras
+                File.WriteAllLines(archivoCsv2, new string[] { "Cantidad,Nombre,Precio,TotalProducto" });
+
+                Console.WriteLine("¡Gracias por su compra! ;) Su orden ha sido registrada.");
+            }
         }
 
     }
