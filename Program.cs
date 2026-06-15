@@ -1,4 +1,4 @@
-﻿/* V11: Agregar función GuardarCarrito() para guardar el carrito en un archivo CSV 
+﻿/* V12: Agregar función MostrarCarrito() para mostrar el contenido del carrito antes de finalizar la compra, con formato tabular y cálculo del total a pagar.
 */
 using System;
 using System.Collections.Generic;
@@ -386,6 +386,24 @@ namespace CodigoBase
             }
 
             File.WriteAllLines(archivoCsv2, lineas);
+        }
+
+        // MOSTRAR CSV Carrito
+        static void MostrarCarrito()
+        {
+            var lista = LeerCarrito();
+            double acumulador = 0;
+
+            Console.WriteLine("\n--- CARRITO DE COMPRAS ---");
+            Console.WriteLine($"{"Cantidad",-12}{"Nombre",-20}{"Precio Unit.",-15}{"Subtotal",-15}");
+            Console.WriteLine(new string('-', 62));
+            foreach (var i in lista)
+            {
+                Console.WriteLine($"{i[0],-12}{i[1],-20}${i[2],-15}${i[3],-15}");
+                acumulador += Convert.ToDouble(i[3]);
+            }
+            Console.WriteLine(new string('-', 62));
+            Console.WriteLine($"\t\t\t\tTotal a pagar: ${acumulador}\n");
         }
 
     }
