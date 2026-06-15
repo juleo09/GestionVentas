@@ -1,5 +1,4 @@
-﻿/* V18: Agregar función GuardarBinario() para respaldar el inventario en formato binario, utilizando BinaryWriter para escribir los datos de manera eficiente. 
-Esta función crea un archivo binario que contiene la cantidad de productos y sus detalles (nombre, costo y precio de venta)
+﻿/* V19: Agregar función LeerBinario() para mostrar el contenido del archivo binario de respaldo.
 */
 using System;
 using System.Collections.Generic;
@@ -407,6 +406,19 @@ namespace CodigoBase
             Console.WriteLine($"\t\t\t\tTotal a pagar: ${acumulador}\n");
         }
 
+        // AGREGAR CSV Carrito
+        static void AgregarCarrito(int cantidad, string nombreProducto, double precioVenta)
+        {
+            var lista = LeerCarrito();
+            double totalProducto = cantidad * precioVenta;
+
+            lista.Add(new string[] { cantidad.ToString(), nombreProducto, precioVenta.ToString(), totalProducto.ToString() });
+            GuardarCarrito(lista);
+
+            Console.WriteLine("Producto Agregado al carrito.");
+            
+        }
+
         //FINALIZAR COMPRA
         static void FinalizarCompra()
         {
@@ -554,6 +566,31 @@ namespace CodigoBase
             }
 
             Console.WriteLine("El inventario se ha respaldado correctamente en formato binario.");
+        }
+
+        static void LeerBinario()
+        {
+            if (!File.Exists(archivoBin))
+            {
+                Console.WriteLine("No existe ningún archivo de respaldo binario.");
+                return;
+            }
+
+            using (BinaryReader br = new BinaryReader(File.Open(archivoBin, FileMode.Open)))
+            {
+                int n = br.ReadInt32();
+
+                Console.WriteLine("\n--- DATOS DESDE ARCHIVO BINARIO ---");
+
+                for (int i = 0; i < n; i++)
+                {
+                    string nombre = br.ReadString();
+                    string costo = br.ReadString();
+                    string venta = br.ReadString();
+
+                    Console.WriteLine($"{nombre} -> Costo: ${costo} | Venta: ${venta}");
+                }
+            }
         }
 
     }
