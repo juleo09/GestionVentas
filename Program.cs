@@ -1,4 +1,4 @@
-﻿/* V8: Agregar función ElimininarInventario() para eliminar un producto del inventario, con manejo de casos donde el producto no existe.
+﻿/* V9: Agregar función BuscarProducto() para que el usuario pueda buscar productos por nombre y agregarlos al carrito directamente desde la búsqueda
 */
 using System;
 using System.Collections.Generic;
@@ -311,6 +311,41 @@ namespace CodigoBase
             {
                 Console.WriteLine("El producto no fue encontrado.");
             }
+        }
+
+        // BUSCAR PRODUCTO(Buscar un producto en específico)
+        static void BuscarInventario()
+        {
+            var lista = LeerInventario();
+
+            Console.Write("Buscar nombre del producto: ");
+            string buscar = Console.ReadLine().ToLower();
+            bool coincidencia = false;
+
+            foreach (var i in lista)
+            {
+                if (i[0].ToLower().Contains(buscar))
+                {
+                    coincidencia = true;
+                    Console.WriteLine($"\n[Encontrado]: {i[0]} - Precio: ${i[2]}");
+                    string nombreProducto = i[0];
+                    double precioVenta = Convert.ToDouble(i[2]);
+
+                    Console.Write("Quiere agregar este producto al carrito?(si/no): ");
+                    string respuesta = Console.ReadLine().ToLower();
+                    if (respuesta == "si" || respuesta == "s")
+                    {
+                        Console.Write("\nQue cantidad quiere?: ");
+                        int cantidad = Convert.ToInt32(Console.ReadLine());
+                        AgregarCarrito(cantidad, nombreProducto, precioVenta);
+                        break;
+                    }
+                        
+                }
+                
+
+            }
+            if (!coincidencia) Console.WriteLine("No se encontraron productos con ese criterio.");
         }
 
     }
