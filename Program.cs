@@ -1,4 +1,4 @@
-﻿/* V7: Agregar función ModificarInventario()ducto a modificar, verificar si existe en el inventario y permitir al administrador ingresar los nuevos precios
+﻿/* V8: Agregar función ElimininarInventario() para eliminar un producto del inventario, con manejo de casos donde el producto no existe.
 */
 using System;
 using System.Collections.Generic;
@@ -281,6 +281,37 @@ namespace CodigoBase
             }
         }
 
+        // ELIMINAR PRODUCTO(Eliminar un producto por completo del inventario)
+        static void EliminarInventario()
+        {
+            var lista = LeerInventario();
+
+            Console.Write("Ingrese el nombre del producto que desea eliminar: ");
+            string nombreEliminar = Console.ReadLine();
+
+            bool encontrado = false;
+
+            // Recorremos la lista de atrás hacia adelante para evitar errores de índice al eliminar
+            for (int i = lista.Count - 1; i >= 0; i--)
+            {
+                if (lista[i][0].Equals(nombreEliminar, StringComparison.OrdinalIgnoreCase))
+                {
+                    lista.RemoveAt(i);
+                    encontrado = true;
+                    break; // Suponiendo que los nombres son únicos, salimos del ciclo
+                }
+            }
+
+            if (encontrado)
+            {
+                GuardarInventario(lista);
+                Console.WriteLine("Producto eliminado exitosamente del inventario.");
+            }
+            else
+            {
+                Console.WriteLine("El producto no fue encontrado.");
+            }
+        }
 
     }
 }
