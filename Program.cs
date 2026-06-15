@@ -1,4 +1,4 @@
-﻿/* V9: Agregar función BuscarProducto() para que el usuario pueda buscar productos por nombre y agregarlos al carrito directamente desde la búsqueda
+﻿/* V10: Agregar función LeerCarrito() para leer el contenido del carrito desde un archivo CSV
 */
 using System;
 using System.Collections.Generic;
@@ -346,6 +346,32 @@ namespace CodigoBase
 
             }
             if (!coincidencia) Console.WriteLine("No se encontraron productos con ese criterio.");
+        }
+
+        //-----------------------------------------------------------------------------------CSV carrito
+        // LEER CSV Carrito
+        static List<string[]> LeerCarrito()
+        {
+            List<string[]> lista = new List<string[]>();
+
+            if (!File.Exists(archivoCsv2))
+            {
+                File.WriteAllLines(archivoCsv2, new string[] { "Cantidad,Nombre,Precio,TotalProducto" });
+                return lista;
+            }
+
+            string[] lineas = File.ReadAllLines(archivoCsv2);
+
+            for (int i = 1; i < lineas.Length; i++)
+            {
+                if (string.IsNullOrWhiteSpace(lineas[i])) continue;
+                string[] datos = lineas[i].Split(',');
+
+                if (datos.Length == 4)
+                    lista.Add(datos);
+            }
+
+            return lista;
         }
 
     }
