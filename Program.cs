@@ -1,4 +1,5 @@
-﻿/* V14: Agregar función LeerRegistro() para mostrar el historial de ventas al administrador.
+﻿/* V15: Agregar función GuardarRegistro() para guardar el registro histórico de ventas en un archivo CSV, y modificar la función FinalizarCompra() para trasladar los elementos del carrito al registro antes de vaciarlo.
+Además, agregar una opción en el panel de administrador para visualizar el registro histórico de ventas.
 */
 using System;
 using System.Collections.Generic;
@@ -464,6 +465,20 @@ namespace CodigoBase
             }
 
             return lista;
+        }
+
+        // GUARDAR CSV Registro
+        static void GuardarRegistro(List<string[]> lista)
+        {
+            List<string> lineas = new List<string>();
+            lineas.Add("NumeroCompra,Cantidad,Nombre,Precio,TotalProducto");
+
+            foreach (var i in lista)
+            {
+                lineas.Add($"{i[0]},{i[1]},{i[2]},{i[3]}, {i[4]}");
+            }
+
+            File.WriteAllLines(archivoCsv3, lineas);
         }
 
     }
