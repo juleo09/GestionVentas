@@ -1,4 +1,4 @@
-﻿/*V21: Agregar Stok en el inventario
+﻿/*V21: Agregar Stock en el inventario
 */
 
 using System;
