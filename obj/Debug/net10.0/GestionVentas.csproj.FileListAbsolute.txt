@@ -13,3 +13,18 @@ D:\VSC\CSHARP\GestionVentas\obj\Debug\net10.0\GestionVentas.pdb
 D:\VSC\CSHARP\GestionVentas\obj\Debug\net10.0\GestionVentas.genruntimeconfig.cache
 D:\VSC\CSHARP\GestionVentas\obj\Debug\net10.0\ref\GestionVentas.dll
 D:\VSC\CSHARP\GestionVentas\obj\Debug\net10.0\GestionVentas.sourcelink.json
+C:\Users\Asus\Documents\aaa\Fundamentos de la Programacion\Trabajo_Fundamentos_Programaion\GestionVentas\bin\Debug\net10.0\GestionVentas.exe
+C:\Users\Asus\Documents\aaa\Fundamentos de la Programacion\Trabajo_Fundamentos_Programaion\GestionVentas\bin\Debug\net10.0\GestionVentas.deps.json
+C:\Users\Asus\Documents\aaa\Fundamentos de la Programacion\Trabajo_Fundamentos_Programaion\GestionVentas\bin\Debug\net10.0\GestionVentas.runtimeconfig.json
+C:\Users\Asus\Documents\aaa\Fundamentos de la Programacion\Trabajo_Fundamentos_Programaion\GestionVentas\bin\Debug\net10.0\GestionVentas.dll
+C:\Users\Asus\Documents\aaa\Fundamentos de la Programacion\Trabajo_Fundamentos_Programaion\GestionVentas\bin\Debug\net10.0\GestionVentas.pdb
+C:\Users\Asus\Documents\aaa\Fundamentos de la Programacion\Trabajo_Fundamentos_Programaion\GestionVentas\obj\Debug\net10.0\GestionVentas.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Asus\Documents\aaa\Fundamentos de la Programacion\Trabajo_Fundamentos_Programaion\GestionVentas\obj\Debug\net10.0\GestionVentas.AssemblyInfoInputs.cache
+C:\Users\Asus\Documents\aaa\Fundamentos de la Programacion\Trabajo_Fundamentos_Programaion\GestionVentas\obj\Debug\net10.0\GestionVentas.AssemblyInfo.cs
+C:\Users\Asus\Documents\aaa\Fundamentos de la Programacion\Trabajo_Fundamentos_Programaion\GestionVentas\obj\Debug\net10.0\GestionVentas.csproj.CoreCompileInputs.cache
+C:\Users\Asus\Documents\aaa\Fundamentos de la Programacion\Trabajo_Fundamentos_Programaion\GestionVentas\obj\Debug\net10.0\GestionVentas.sourcelink.json
+C:\Users\Asus\Documents\aaa\Fundamentos de la Programacion\Trabajo_Fundamentos_Programaion\GestionVentas\obj\Debug\net10.0\GestionVentas.dll
+C:\Users\Asus\Documents\aaa\Fundamentos de la Programacion\Trabajo_Fundamentos_Programaion\GestionVentas\obj\Debug\net10.0\refint\GestionVentas.dll
+C:\Users\Asus\Documents\aaa\Fundamentos de la Programacion\Trabajo_Fundamentos_Programaion\GestionVentas\obj\Debug\net10.0\GestionVentas.pdb
+C:\Users\Asus\Documents\aaa\Fundamentos de la Programacion\Trabajo_Fundamentos_Programaion\GestionVentas\obj\Debug\net10.0\GestionVentas.genruntimeconfig.cache
+C:\Users\Asus\Documents\aaa\Fundamentos de la Programacion\Trabajo_Fundamentos_Programaion\GestionVentas\obj\Debug\net10.0\ref\GestionVentas.dll
