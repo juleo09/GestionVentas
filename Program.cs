@@ -1,4 +1,6 @@
-﻿//V20: Impletación del stock en el código y validación de opciones y respuestas
+﻿/*V21: Agregar Stok en el inventario
+*/
+
 using System;
 using System.Collections.Generic;
 using System.IO;
