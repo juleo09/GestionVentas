@@ -1,6 +1,4 @@
-﻿/*V21: Agregar Stock en el inventario
-*/
-
+﻿//V22: Arreglando función AgregarInventario() para validar que los inputs ingresados por el usuario sean válidos
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -225,33 +223,51 @@ namespace CodigoBase
         {
             var lista = LeerInventario();
 
+            Console.WriteLine("\n--- AGREGAR NUEVO PRODUCTO ---");
+
             Console.Write("Nombre: ");
             string nombre = Console.ReadLine();
 
-            Console.Write("Precio Costo: ");
-            string costo = Console.ReadLine();
-
-            Console.Write("Precio Venta: ");
-            string venta = Console.ReadLine();
-
-            Console.Write("Stock Inicial: ");
-            string stock = Console.ReadLine();
-
-            //Validación: Verificamos si alguno de los inputs está vacío o tiene solo espacios
-            if (string.IsNullOrWhiteSpace(nombre) ||
-                string.IsNullOrWhiteSpace(costo) ||
-                string.IsNullOrWhiteSpace(venta) ||
-                string.IsNullOrWhiteSpace(stock))
+            // Validar que el nombre no esté vacío y no contenga comas para no romper el CSV
+            if (string.IsNullOrWhiteSpace(nombre) || nombre.Contains(","))
             {
-                Console.WriteLine("\n[ERROR]: Hubo un error al agregar un producto nuevo. Ningún campo puede quedar vacío");
-                return;// Cancelamos el flujo y salimos de la función sin guardar nada
+                Console.WriteLine("\n[ERROR]: El nombre no puede estar vacío ni contener comas (',').");
+                return;
             }
 
-            lista.Add(new string[] { nombre, costo, venta, stock });
+            Console.Write("Precio Costo: ");
+            double costo;
+            // Validamos que sea un número decimal válido y positivo
+            if (!double.TryParse(Console.ReadLine(), out costo) || costo < 0)
+            {
+                Console.WriteLine("\n[ERROR]: El precio de costo debe ser un número válido mayor o igual a 0.");
+                return;
+            }
+
+            Console.Write("Precio Venta: ");
+            double venta;
+            // Validamos que sea un número decimal válido y positivo
+            if (!double.TryParse(Console.ReadLine(), out venta) || venta < 0)
+            {
+                Console.WriteLine("\n[ERROR]: El precio de venta debe ser un número válido mayor o igual a 0.");
+                return;
+            }
+
+            Console.Write("Stock Inicial: ");
+            int stock;
+            // Validamos que sea un número entero válido y positivo
+            if (!int.TryParse(Console.ReadLine(), out stock) || stock < 0)
+            {
+                Console.WriteLine("\n[ERROR]: El stock inicial debe ser un número entero mayor o igual a 0.");
+                return;
+            }
+
+            // Si todas las validaciones pasaron, guardamos los datos convertidos a string
+            lista.Add(new string[] { nombre, costo.ToString(), venta.ToString(), stock.ToString() });
 
             GuardarInventario(lista);
 
-            Console.WriteLine("Producto Agregado exitosamente.");
+            Console.WriteLine("\n¡Producto agregado exitosamente!");
         }
 
         // MODIFICAR PRODUCTO(modificar algún producto en el inventario)
@@ -812,7 +828,7 @@ namespace CodigoBase
                 foreach (var i in lista)
                 {
                     bw.Write(i[0]); // Nombre
-                    bw.Write(i[1]); // COsto
+                    bw.Write(i[1]); // Costo
                     bw.Write(i[2]); // Venta
                     bw.Write(i[3]); // Stock
                 }
