@@ -1,4 +1,4 @@
-﻿//V22: Arreglando función AgregarInventario() para validar que los inputs ingresados por el usuario sean válidos
+﻿//V23: Implementando la verificación del stock de todos los productos y arreglando la validación en la función ModificarInventario() para evitar letras en los inputs.
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,12 +11,10 @@ namespace CodigoBase
         static string archivoBin = "inventario.bin";
         static string archivoCsv2 = "carrito.csv";
         static string archivoCsv3 = "registro.csv";
-        static int opcion;
         static void Main(string[] args)
-        { 
-        
-            
-            
+        {
+            int opcion;
+
             do
             {
                 Console.Clear();
@@ -31,7 +29,7 @@ namespace CodigoBase
                 {
                     switch (opcion)
                     {
-                        case 1:Console.Clear(); Administrador(); break; // Interfaz de administrador
+                        case 1: Console.Clear(); VerificarStockBajo(); Console.Clear(); Administrador(); break; // verificación del stock de todos los productos e Interfaz de administrador
                         case 2:Console.Clear(); Usuario(); break; // Interfaz de Usuario
                         case 0:break;//Sale limpiamente
                         default:
@@ -322,12 +320,14 @@ namespace CodigoBase
                 Console.Write($"Nuevo precio de venta (Actual: {productoElegido[2]}): ");
                 string nuevaVenta = Console.ReadLine();
 
-                // Validación de seguridad: si deja campos vacíos, cancelamos el cambio
-                if (string.IsNullOrWhiteSpace(nuevoCosto) || string.IsNullOrWhiteSpace(nuevaVenta))
+
+                // Validación de seguridad: si deja campos vacíos o ingresa letras o símbolos, cancelamos el cambio. El "_" es para descartar el resultado sin crear variables en la memoria
+                if (string.IsNullOrWhiteSpace(nuevoCosto) || string.IsNullOrWhiteSpace(nuevaVenta) || !double.TryParse(nuevoCosto, out _) || !double.TryParse(nuevaVenta, out _))
                 {
-                    Console.WriteLine("\n[ERROR]: Hubo un error al modificar el producto. Los precios no pueden quedar vacíos.");
+                    Console.WriteLine("\n[ERROR]: Hubo un error al modificar el producto. Los precios no pueden quedar vacíos o ser letras.");
                     return;
                 }
+
 
                 // Aplicamos los cambios directamente en el objeto referenciado de la lista original
                 productoElegido[1] = nuevoCosto;
@@ -574,8 +574,109 @@ namespace CodigoBase
                 Console.WriteLine("\nBúsqueda finalizada sin agregar productos.");
             }
         }
-        
-        
+
+        // CONTAR(cantidad de productos en el inventario)
+        static void Contar()
+        {
+            var lista = LeerInventario();
+            Console.WriteLine("Cantidad total de productos registrados en inventario: " + lista.Count);
+        }
+
+        // VERIFICAR Y RELLENAR STOCK BAJO (< 10)
+        static void VerificarStockBajo()
+        {
+            bool continuarRellenando = true;
+
+            while (continuarRellenando)
+            {
+                var listaInventario = LeerInventario();
+                // Filtramos en una lista temporal los productos cuyo stock sea menor a 10
+                List<string[]> stockBajo = new List<string[]>();
+
+                foreach (var prod in listaInventario)
+                {
+                    if (int.TryParse(prod[3], out int stock) && stock < 10)
+                    {
+                        stockBajo.Add(prod);
+                    }
+                }
+
+                // Si no hay productos con stock bajo, salimos del bucle
+                if (stockBajo.Count == 0)
+                {
+                    Console.WriteLine("\n[INFO]: No hay productos con stock bajo (menor a 10).");
+                    break;
+                }
+
+                Console.Clear();
+                Console.WriteLine("\n===== ¡ALERTA: PRODUCTOS CON STOCK BAJO (< 10) =====");
+                for (int i = 0; i < stockBajo.Count; i++)
+                {
+                    Console.WriteLine($"{i + 1}) {stockBajo[i][0],-42} - Stock Actual: {stockBajo[i][3]}");
+                }
+                Console.WriteLine(new string('-', 60));
+                Console.Write("¿Desea rellenar el stock de alguno de estos productos? (si/no): ");
+                string respuesta = Console.ReadLine().ToLower();
+
+                if (respuesta == "si" || respuesta == "s")
+                {
+                    Console.Write("Seleccione el número de opción a rellenar: ");
+                    int opcionSeleccionada;
+
+                    if (int.TryParse(Console.ReadLine(), out opcionSeleccionada) && opcionSeleccionada >= 1 && opcionSeleccionada <= stockBajo.Count)
+                    {
+                        // Obtenemos el producto seleccionado de la lista filtrada
+                        var productoElegido = stockBajo[opcionSeleccionada - 1];
+
+                        Console.WriteLine($"\nSeleccionado: {productoElegido[0]} | Stock Actual: {productoElegido[3]}");
+                        Console.Write("Cantidad de stock a añadir: ");
+
+                        if (int.TryParse(Console.ReadLine(), out int cantidadAnadir) && cantidadAnadir > 0)
+                        {
+                            // Buscamos el producto en la lista original del inventario para modificarlo directamente
+                            foreach (var prodOriginal in listaInventario)
+                            {
+                                if (prodOriginal[0].Equals(productoElegido[0], StringComparison.OrdinalIgnoreCase))
+                                {
+                                    int stockActual = Convert.ToInt32(prodOriginal[3]);
+                                    prodOriginal[3] = (stockActual + cantidadAnadir).ToString();
+                                    break;
+                                }
+                            }
+
+                            // Guardamos los cambios en el CSV
+                            GuardarInventario(listaInventario);
+                            Console.WriteLine("\n¡Stock actualizado con éxito!");
+                        }
+                        else
+                        {
+                            Console.WriteLine("\n[ERROR]: Cantidad de stock inválida. Debe ser un número entero mayor a 0.");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nOpción inválida.");
+                    }
+
+                    // Preguntar si desea continuar rellenando los que quedan en la lista
+                    Console.Write("\n¿Desea seguir rellenando el stock de otros productos de la lista? (si/no): ");
+                    string respuestaContinuar = Console.ReadLine().ToLower();
+                    if (respuestaContinuar != "si" && respuestaContinuar != "s")
+                    {
+                        continuarRellenando = false;
+                    }
+                }
+                else
+                {
+                    // Si el administrador no quiere rellenar nada, rompe el bucle
+                    continuarRellenando = false;
+                }
+            }
+
+            Console.WriteLine("\nRedireccionando al Panel Administrador... Presione cualquier tecla.");
+            Console.ReadKey();
+        }
+
         //-----------------------------------------------------------------------------------CSV carrito
         // LEER CSV Carrito
         static List<string[]> LeerCarrito()
@@ -754,7 +855,7 @@ namespace CodigoBase
 
             foreach (var i in lista)
             {
-                lineas.Add($"{i[0]},{i[1]},{i[2]},{i[3]}, {i[4]}");
+                lineas.Add($"{i[0]},{i[1]},{i[2]},{i[3]},{i[4]}");
             }
 
             File.WriteAllLines(archivoCsv3, lineas);
@@ -807,19 +908,12 @@ namespace CodigoBase
             Console.WriteLine($"Ganancias Totales:          ${gananciasTotales}");
         }
 
-        
-
-        // CONTAR(cantidad de productos en el inventario)
-        static void Contar()
-        {
-            var lista = LeerInventario();
-            Console.WriteLine("Cantidad total de productos registrados en inventario: " + lista.Count);
-        }
+                
 
         // BINARIO
         static void GuardarBinario()
         {
-            var lista = LeerInventario();
+            var lista = LeerInventario();//Guarda todo lo referente al inventario.csv
 
             using (BinaryWriter bw = new BinaryWriter(File.Open(archivoBin, FileMode.Create)))
             {

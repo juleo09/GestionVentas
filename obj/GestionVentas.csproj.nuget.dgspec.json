@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Asus\\Documents\\aaa\\Fundamentos de la Programacion\\Trabajo_Fundamentos_Programaion\\GestionVentas\\GestionVentas.csproj": {}
+    "C:\\Users\\Admin\\Downloads\\GestionVentas\\GestionVentas.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Asus\\Documents\\aaa\\Fundamentos de la Programacion\\Trabajo_Fundamentos_Programaion\\GestionVentas\\GestionVentas.csproj": {
+    "C:\\Users\\Admin\\Downloads\\GestionVentas\\GestionVentas.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Asus\\Documents\\aaa\\Fundamentos de la Programacion\\Trabajo_Fundamentos_Programaion\\GestionVentas\\GestionVentas.csproj",
+        "projectUniqueName": "C:\\Users\\Admin\\Downloads\\GestionVentas\\GestionVentas.csproj",
         "projectName": "GestionVentas",
-        "projectPath": "C:\\Users\\Asus\\Documents\\aaa\\Fundamentos de la Programacion\\Trabajo_Fundamentos_Programaion\\GestionVentas\\GestionVentas.csproj",
-        "packagesPath": "C:\\Users\\Asus\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Asus\\Documents\\aaa\\Fundamentos de la Programacion\\Trabajo_Fundamentos_Programaion\\GestionVentas\\obj\\",
+        "projectPath": "C:\\Users\\Admin\\Downloads\\GestionVentas\\GestionVentas.csproj",
+        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Admin\\Downloads\\GestionVentas\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Asus\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
