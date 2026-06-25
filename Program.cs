@@ -1,4 +1,8 @@
-﻿//V23: Implementando la verificación del stock de todos los productos y arreglando la validación en la función ModificarInventario() para evitar letras en los inputs.
+﻿/*V24: Arreglando las Ganancias totales guardando en el registro.csv el Precio Costo que se tenía en el producto al momento de la venta.
+ * Y así evitar problemas a futuro cuando se actualice el costo de los productos en el inventario, ya que con el antiguo código en el histórico se calcularían
+ * las ganancias del pasado pero con el costo actual del inventario, alterando la contabilidad real. Para ello se ha actualizar la función FinalizarCompra()
+ * y todas las funciones de registro.
+*/
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -236,18 +240,18 @@ namespace CodigoBase
             Console.Write("Precio Costo: ");
             double costo;
             // Validamos que sea un número decimal válido y positivo
-            if (!double.TryParse(Console.ReadLine(), out costo) || costo < 0)
+            if (!double.TryParse(Console.ReadLine(), out costo) || costo <= 0)
             {
-                Console.WriteLine("\n[ERROR]: El precio de costo debe ser un número válido mayor o igual a 0.");
+                Console.WriteLine("\n[ERROR]: El precio de costo debe ser un número válido mayor a 0.");
                 return;
             }
 
             Console.Write("Precio Venta: ");
             double venta;
             // Validamos que sea un número decimal válido y positivo
-            if (!double.TryParse(Console.ReadLine(), out venta) || venta < 0)
+            if (!double.TryParse(Console.ReadLine(), out venta) || venta <= 0)
             {
-                Console.WriteLine("\n[ERROR]: El precio de venta debe ser un número válido mayor o igual a 0.");
+                Console.WriteLine("\n[ERROR]: El precio de venta debe ser un número válido mayor a 0.");
                 return;
             }
 
@@ -315,14 +319,18 @@ namespace CodigoBase
                 Console.WriteLine($"\nModificando: {productoElegido[0]}");
 
                 Console.Write($"Nuevo precio de costo (Actual: {productoElegido[1]}): ");
-                string nuevoCosto = Console.ReadLine();
+
+                // Validación de seguridad: Validamos que lo que se ingresa sea un número y que tiene que ser mayor a 0.
+                if (!double.TryParse(Console.ReadLine(), out double nuevoCosto) || nuevoCosto <= 0)
+                {
+                    Console.WriteLine("\n[ERROR]: Hubo un error al modificar el producto. Los precios no pueden quedar vacíos o ser letras.");
+                    return;
+                }
 
                 Console.Write($"Nuevo precio de venta (Actual: {productoElegido[2]}): ");
-                string nuevaVenta = Console.ReadLine();
 
-
-                // Validación de seguridad: si deja campos vacíos o ingresa letras o símbolos, cancelamos el cambio. El "_" es para descartar el resultado sin crear variables en la memoria
-                if (string.IsNullOrWhiteSpace(nuevoCosto) || string.IsNullOrWhiteSpace(nuevaVenta) || !double.TryParse(nuevoCosto, out _) || !double.TryParse(nuevaVenta, out _))
+                // Validación de seguridad: Validamos que lo que se ingresa sea un número y que tiene que ser mayor a 0.
+                if (!double.TryParse(Console.ReadLine(), out double nuevaVenta) || nuevaVenta <= 0)
                 {
                     Console.WriteLine("\n[ERROR]: Hubo un error al modificar el producto. Los precios no pueden quedar vacíos o ser letras.");
                     return;
@@ -330,8 +338,8 @@ namespace CodigoBase
 
 
                 // Aplicamos los cambios directamente en el objeto referenciado de la lista original
-                productoElegido[1] = nuevoCosto;
-                productoElegido[2] = nuevaVenta;
+                productoElegido[1] = nuevoCosto.ToString();
+                productoElegido[2] = nuevaVenta.ToString();
 
                 // Guardamos los cambios en el archivo CSV
                 GuardarInventario(listaInventario);
@@ -803,14 +811,27 @@ namespace CodigoBase
                 // Guardar los cambios del stock en el CSV de inventario
                 GuardarInventario(inventario);
 
-                // 3. Trasladar elementos del carrito al registro histórico de ventas
+                // 3. Trasladar elementos del carrito al registro histórico de ventas y guardamos el costo actual para futuras actualizaciones del mismo
                 string numeroCompra = DateTime.Now.ToString("yyyyMMddHHmmss"); // Genera un ID único basado en tiempo
                 var registro = LeerRegistro();
-
+                                
                 foreach (var item in carrito)
                 {
-                    // Formato Registro: NumeroCompra, Cantidad, Nombre, Precio, TotalProducto
-                    registro.Add(new string[] { numeroCompra, item[0], item[1], item[2], item[3] });
+                    string nombreProd = item[1];
+                    string costoActual = "0";// Por si acaso no se encuentra
+
+                    // Buscamos el costo que tiene el producto HOY en el inventario
+                    foreach (var prodInv in inventario)
+                    {
+                        if (prodInv[0].Equals(nombreProd, StringComparison.OrdinalIgnoreCase))
+                        {
+                            costoActual = prodInv[1]; // Guardamos el precio del costo actual
+                            break;
+                        }
+                    }
+
+                    // Formato Registro: NumeroCompra, Cantidad, Nombre, Costo, Precio, TotalProducto
+                    registro.Add(new string[] { numeroCompra, item[0], item[1], costoActual, item[2], item[3] });
                 }
 
                 GuardarRegistro(registro);
@@ -830,7 +851,7 @@ namespace CodigoBase
 
             if (!File.Exists(archivoCsv3))
             {
-                File.WriteAllLines(archivoCsv3, new string[] { "NumeroCompra,Cantidad,Nombre,Precio,TotalProducto" });
+                File.WriteAllLines(archivoCsv3, new string[] { "NumeroCompra,Cantidad,Nombre,Costo,Precio,TotalProducto" });
                 return lista;
             }
 
@@ -841,7 +862,7 @@ namespace CodigoBase
                 if (string.IsNullOrWhiteSpace(lineas[i])) continue;
                 string[] datos = lineas[i].Split(',');
 
-                if (datos.Length == 5)
+                if (datos.Length == 6)
                     lista.Add(datos);
             }
 
@@ -851,11 +872,11 @@ namespace CodigoBase
         static void GuardarRegistro(List<string[]> lista)
         {
             List<string> lineas = new List<string>();
-            lineas.Add("NumeroCompra,Cantidad,Nombre,Precio,TotalProducto");
+            lineas.Add("NumeroCompra,Cantidad,Nombre,Costo,Precio,TotalProducto");
 
             foreach (var i in lista)
             {
-                lineas.Add($"{i[0]},{i[1]},{i[2]},{i[3]},{i[4]}");
+                lineas.Add($"{i[0]},{i[1]},{i[2]},{i[3]},{i[4]},{i[5]}");
             }
 
             File.WriteAllLines(archivoCsv3, lineas);
@@ -864,7 +885,6 @@ namespace CodigoBase
         static void MostrarRegistro()
         {
             var listaRegistro = LeerRegistro();
-            var listaInventario = LeerInventario(); // Cargamos el inventario para cruzar los costos
 
             double acumuladorVentas = 0;
             double acumuladorCostos = 0;
@@ -876,28 +896,18 @@ namespace CodigoBase
             foreach (var i in listaRegistro)
             {
                 // Extraer datos del registro de ventas
-                string nombreProducto = i[2];
                 int cantidad = Convert.ToInt32(i[1]);
-                double precioVentaUnitario = Convert.ToDouble(i[3]);
-                double totalProductoVenta = Convert.ToDouble(i[4]);
+                string nombreProducto = i[2];
+                double precioCostoHistorico = Convert.ToDouble(i[3]);
+                double precioVentaUnitario = Convert.ToDouble(i[4]);
+                double totalProductoVenta = Convert.ToDouble(i[5]);
 
                 Console.WriteLine($"{i[0],-18}{cantidad,-8}{nombreProducto,-42}${precioVentaUnitario,-13}${totalProductoVenta,-13}");
 
                 acumuladorVentas += totalProductoVenta;
 
-                // Buscar el precio de costo unitario correspondiente en el inventario
-                double precioCostoUnitario = 0;
-                foreach (var inv in listaInventario)
-                {
-                    if (inv[0].Equals(nombreProducto, StringComparison.OrdinalIgnoreCase))// if(inv[0].ToLower() == nombreProducto.ToLower())
-                    {
-                        precioCostoUnitario = Convert.ToDouble(inv[1]);
-                        break;
-                    }
-                }
-
-                // Calcular el costo total de cada venta(Costo Unitario * Cantidad)
-                acumuladorCostos += (precioCostoUnitario * cantidad);
+                // El costo total de esta venta se calcula con el costo guardo en su momento
+                acumuladorCostos += (precioCostoHistorico * cantidad);                
             }
 
             // Ganancia Neta = Ingresos Totales - Costos Totales
