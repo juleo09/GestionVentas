@@ -1,7 +1,4 @@
-﻿/*V24: Arreglando las Ganancias totales guardando en el registro.csv el Precio Costo que se tenía en el producto al momento de la venta.
- * Y así evitar problemas a futuro cuando se actualice el costo de los productos en el inventario, ya que con el antiguo código en el histórico se calcularían
- * las ganancias del pasado pero con el costo actual del inventario, alterando la contabilidad real. Para ello se ha actualizar la función FinalizarCompra()
- * y todas las funciones de registro.
+﻿/*V25: Alineando lo que se imprime a través de la función LeerBinario() 
 */
 using System;
 using System.Collections.Generic;
@@ -238,27 +235,24 @@ namespace CodigoBase
             }
 
             Console.Write("Precio Costo: ");
-            double costo;
             // Validamos que sea un número decimal válido y positivo
-            if (!double.TryParse(Console.ReadLine(), out costo) || costo <= 0)
+            if (!double.TryParse(Console.ReadLine(), out double costo) || costo <= 0)
             {
                 Console.WriteLine("\n[ERROR]: El precio de costo debe ser un número válido mayor a 0.");
                 return;
             }
 
             Console.Write("Precio Venta: ");
-            double venta;
             // Validamos que sea un número decimal válido y positivo
-            if (!double.TryParse(Console.ReadLine(), out venta) || venta <= 0)
+            if (!double.TryParse(Console.ReadLine(), out double venta) || venta <= 0)
             {
                 Console.WriteLine("\n[ERROR]: El precio de venta debe ser un número válido mayor a 0.");
                 return;
             }
 
             Console.Write("Stock Inicial: ");
-            int stock;
             // Validamos que sea un número entero válido y positivo
-            if (!int.TryParse(Console.ReadLine(), out stock) || stock < 0)
+            if (!int.TryParse(Console.ReadLine(), out int stock) || stock < 0)
             {
                 Console.WriteLine("\n[ERROR]: El stock inicial debe ser un número entero mayor o igual a 0.");
                 return;
@@ -954,6 +948,8 @@ namespace CodigoBase
                 int n = br.ReadInt32();
 
                 Console.WriteLine("\n--- DATOS DESDE ARCHIVO BINARIO ---");
+                Console.WriteLine($"{"Nombre",-42}{"Costo",-12}{"Venta",-12}{"Stock",-10}");
+                Console.WriteLine(new string('-', 76));
 
                 for (int i = 0; i < n; i++)
                 {
@@ -962,7 +958,7 @@ namespace CodigoBase
                     string venta = br.ReadString();
                     string stock = br.ReadString();
 
-                    Console.WriteLine($"{nombre} -> Costo: ${costo} | Venta: ${venta} | Stock: {stock}");
+                    Console.WriteLine($"{nombre,-42} -> Costo: ${costo,-11} | Venta: ${venta,-11} | Stock: {stock,-10}");
                 }
             }
         }
